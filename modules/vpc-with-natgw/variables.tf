@@ -10,6 +10,10 @@ variable "public_subnet_cidrs" {
   description = "Three CIDRs for public subnets"
   type        = list(string)
 }
+variable "private_subnet_cidrs" {
+  description = "Three CIDRs for private subnets"
+  type        = list(string)
+}
 variable "tags" {
     type      = map(string)
 }
