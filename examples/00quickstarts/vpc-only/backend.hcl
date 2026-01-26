@@ -1,5 +1,5 @@
-bucket         = "my-tf-state-bucket"
-key            = "landing-zone-catalog/examples/vpc-only/terraform.tfstate"
+bucket         = "terraform-state-network-157671019750"
+key            = "vpc-only/terraform.state"
 region         = "us-east-1"
-dynamodb_table = "my-tf-locks"
+dynamodb_table = "vpc-only-tflock"
 encrypt        = true
