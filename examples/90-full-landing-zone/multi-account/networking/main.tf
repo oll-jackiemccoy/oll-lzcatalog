@@ -1,4 +1,6 @@
-resource "aws_ec2_transit_gateway" "main" {
+module "tgw" {
+  source              = "../../../../modules/tgw"
+  tgw_name                        = var.tgw_name
   description                     = var.description
   amazon_side_asn                 = var.amazon_side_asn
   auto_accept_shared_attachments  = var.auto_accept_shared_attachments
@@ -7,7 +9,6 @@ resource "aws_ec2_transit_gateway" "main" {
   dns_support                     = var.dns_support
   vpn_ecmp_support                = var.vpn_ecmp_support
 
-    tags   = merge(var.tags, 
-    {Name = var.tgw_name }
-    )
+  tags   = merge(var.tags, {
+    Name = var.tgw_name })
 }
