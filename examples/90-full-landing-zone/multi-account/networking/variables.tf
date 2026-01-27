@@ -30,7 +30,13 @@ variable "dns_support" {
 variable "vpn_ecmp_support" {
   description = "Enable VPN ECMP support on the TGW"
   type        = string
-
+}
+variable "principal" {
+  description = "Organization ARN or AWS Account ID)"
+  type        = string
+}
+variable "share_name" { 
+    type = string 
 }
 variable "tags" {
   description = "Tags to apply to resources."

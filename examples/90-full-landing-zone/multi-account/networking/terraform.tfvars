@@ -11,3 +11,5 @@ tags = {
   Environment  = "multiaccount"
   map-migrated = "mig-map-tagname-here"
 }
+share_name            = "main-tgw-share"
+principal = "arn:aws:organizations::437670317305:organization/o-w5t4cy1z8m"

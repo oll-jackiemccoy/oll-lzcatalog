@@ -11,3 +11,18 @@ resource "aws_ec2_transit_gateway" "main" {
     {Name = var.tgw_name }
     )
 }
+#RAM Shares
+resource "aws_ram_resource_share" "this" {
+  name                      = var.share_name
+  allow_external_principals = false
+  tags                      = var.tags
+}
+resource "aws_ram_resource_association" "tgw" {
+  resource_share_arn = aws_ram_resource_share.this.arn
+  resource_arn       = aws_ec2_transit_gateway.main.arn
+}
+
+resource "aws_ram_principal_association" "tgw_org_share" {
+   principal           = var.principal
+   resource_share_arn  = aws_ram_resource_share.this.arn
+ }
