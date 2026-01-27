@@ -38,6 +38,15 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "ingress" {
     Name = "${var.ingress_prefix}-to-tgw"
   })
 }
+resource "aws_ec2_transit_gateway_vpc_attachment" "egress" {
+  transit_gateway_id = module.tgw.tgw_id
+  vpc_id             = module.egress_vpc.vpc_id
+  subnet_ids         = module.egress_vpc.private_subnet_ids
+
+  tags = merge(var.tags, {
+    Name = "${var.egress_prefix}-to-tgw"
+  })
+}
 resource "aws_ec2_transit_gateway_route_table" "ingress" {
   transit_gateway_id = module.tgw.tgw_id
   tags = merge(var.tags, { Name = "tgw-rtb-${var.ingress_prefix}" })
@@ -55,4 +64,8 @@ resource "aws_ec2_transit_gateway_route_table" "egress" {
 resource "aws_ec2_transit_gateway_route_table_association" "ingress_assoc" {
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.ingress.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.ingress.id
+}
+resource "aws_ec2_transit_gateway_route_table_association" "egress_assoc" {
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.egress.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.egress.id
 }
