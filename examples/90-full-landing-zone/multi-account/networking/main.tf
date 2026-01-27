@@ -13,3 +13,11 @@ module "tgw" {
 
   tags   = merge(var.tags)
 }
+module "ingress_vpc" {
+  source              = "../../../../modules/ingress-vpc"
+  vpc_cidr            = var.vpc_cidr
+  public_subnet_cidrs = var.public_subnet_cidrs
+  private_subnet_cidrs= var.private_subnet_cidrs
+  name_prefix         = var.name_prefix
+  tags                = var.tags
+}

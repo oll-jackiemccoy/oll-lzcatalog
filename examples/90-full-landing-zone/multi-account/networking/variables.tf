@@ -38,7 +38,23 @@ variable "principal" {
 variable "share_name" { 
     type = string 
 }
+variable "region" {
+  description = "AWS region"
+  type        = string
+}
+variable "name_prefix" {
+    type = string
+}
 variable "tags" {
-  description = "Tags to apply to resources."
+  description = "Common resource tags"
   type        = map(string)
+}
+variable "vpc_cidr" {
+    type = string
+}
+variable "public_subnet_cidrs" {
+  type = list(string)
+}
+variable "private_subnet_cidrs" {
+  type = list(string)
 }
