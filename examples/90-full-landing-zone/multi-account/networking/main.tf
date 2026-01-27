@@ -18,6 +18,33 @@ module "ingress_vpc" {
   vpc_cidr            = var.vpc_cidr
   public_subnet_cidrs = var.public_subnet_cidrs
   private_subnet_cidrs= var.private_subnet_cidrs
-  name_prefix         = var.name_prefix
+  name_prefix         = var.ingress_prefix
   tags                = var.tags
+}
+resource "aws_ec2_transit_gateway_vpc_attachment" "ingress" {
+  transit_gateway_id = module.tgw.tgw_id
+  vpc_id             = module.ingress_vpc.vpc_id
+  subnet_ids         = module.ingress_vpc.private_subnet_ids
+
+  tags = merge(var.tags, {
+    Name = "${var.ingress_prefix}-to-tgw"
+  })
+}
+resource "aws_ec2_transit_gateway_route_table" "ingress" {
+  transit_gateway_id = module.tgw.tgw_id
+  tags = merge(var.tags, { Name = "tgw-rtb-${var.ingress_prefix}" })
+}
+
+resource "aws_ec2_transit_gateway_route_table" "spokes" {
+  transit_gateway_id = module.tgw.tgw_id
+  tags = merge(var.tags, { Name = "tgw-rtb-${var.spokes_prefix}" })
+}
+
+resource "aws_ec2_transit_gateway_route_table" "egress" {
+  transit_gateway_id = module.tgw.tgw_id
+  tags = merge(var.tags, { Name = "tgw-rtb-${var.egress_prefix}" })
+}
+resource "aws_ec2_transit_gateway_route_table_association" "ingress_assoc" {
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.ingress.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.ingress.id
 }
