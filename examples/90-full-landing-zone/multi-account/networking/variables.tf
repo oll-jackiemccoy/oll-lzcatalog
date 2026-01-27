@@ -50,12 +50,21 @@ variable "tags" {
   description = "Common resource tags"
   type        = map(string)
 }
-variable "vpc_cidr" {
+variable "ingress_vpc_cidr" {
     type = string
 }
-variable "public_subnet_cidrs" {
+variable "ingress_public_subnet_cidrs" {
   type = list(string)
 }
-variable "private_subnet_cidrs" {
+variable "ingress_private_subnet_cidrs" {
+  type = list(string)
+}
+variable "egress_vpc_cidr" {
+    type = string
+}
+variable "egress_public_subnet_cidrs" {
+  type = list(string)
+}
+variable "egress_private_subnet_cidrs" {
   type = list(string)
 }

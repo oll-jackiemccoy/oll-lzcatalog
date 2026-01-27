@@ -52,7 +52,7 @@ resource "aws_subnet" "publicsubnet_b" {
   depends_on = [aws_vpc.egress_vpc]
 }
 resource "aws_subnet" "publicsubnet_c" {
-  vpc_id                  = aws_vpc.egress_vpcmain_vpc.id
+  vpc_id                  = aws_vpc.egress_vpc.id
   cidr_block              = var.public_subnet_cidrs[2]
   availability_zone_id    = local.az_ids[2]
   map_public_ip_on_launch = true
@@ -64,14 +64,14 @@ resource "aws_subnet" "publicsubnet_c" {
 }
 ########## Private subnets ##########
 resource "aws_subnet" "privatesubnet_a" {
-  vpc_id               = aws_vpc.main_egress_vpcvpc.id
+  vpc_id               = aws_vpc.egress_vpc.id
   cidr_block           = var.private_subnet_cidrs[0]
   availability_zone_id = local.az_ids[0]
   tags = merge(var.tags, {
     Name = "${var.name_prefix}-privatesubnet-a"
     Tier = "private"
   })
-  depends_on = [aws_vpc.maegress_vpcin_vpc]
+  depends_on = [aws_vpc.egress_vpc]
 }
 resource "aws_subnet" "privatesubnet_b" {
   vpc_id               = aws_vpc.egress_vpc.id
@@ -128,21 +128,21 @@ resource "aws_nat_gateway" "natgw_c" {
 }
 # Public route table -> Internet via IGW
 resource "aws_route_table" "rtb_public_a" {
-  vpc_id = aws_vpc.mainegress_vpc_vpc.id
+  vpc_id = aws_vpc.egress_vpc.id
   tags = merge(var.tags, {
     Name = "${var.name_prefix}-rtb-public-a"
     Tier = "public"
   })
 }
 resource "aws_route_table" "rtb_public_b" {
-  vpc_id = aws_vpc.mainegress_vpc_vpc.id
+  vpc_id = aws_vpc.egress_vpc.id
   tags = merge(var.tags, {
     Name = "${var.name_prefix}-rtb-public-b"
     Tier = "public"
   })
 }
 resource "aws_route_table" "rtb_public_c" {
-  vpc_id = aws_vpc.maiegress_vpcn_vpc.id
+  vpc_id = aws_vpc.egress_vpc.id
   tags = merge(var.tags, {
     Name = "${var.name_prefix}-rtb-public-c"
     Tier = "public"

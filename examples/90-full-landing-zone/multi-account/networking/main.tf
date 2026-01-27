@@ -15,10 +15,18 @@ module "tgw" {
 }
 module "ingress_vpc" {
   source              = "../../../../modules/ingress-vpc"
-  vpc_cidr            = var.vpc_cidr
-  public_subnet_cidrs = var.public_subnet_cidrs
-  private_subnet_cidrs= var.private_subnet_cidrs
+  vpc_cidr            = var.ingress_vpc_cidr
+  public_subnet_cidrs = var.ingress_public_subnet_cidrs
+  private_subnet_cidrs= var.ingress_private_subnet_cidrs
   name_prefix         = var.ingress_prefix
+  tags                = var.tags
+}
+module "egress_vpc" {
+  source              = "../../../../modules/egress-vpc"
+  vpc_cidr            = var.egress_vpc_cidr
+  public_subnet_cidrs = var.egress_public_subnet_cidrs
+  private_subnet_cidrs= var.egress_private_subnet_cidrs
+  name_prefix         = var.egress_prefix
   tags                = var.tags
 }
 resource "aws_ec2_transit_gateway_vpc_attachment" "ingress" {

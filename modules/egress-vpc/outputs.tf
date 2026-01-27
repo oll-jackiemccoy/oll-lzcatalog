@@ -1,5 +1,5 @@
 output "vpc_id" {
-  value = aws_vpc.main_vpc.id
+  value = aws_vpc.egress_vpc.id
 }
 output "azs_used" {
   value       = local.az_names
