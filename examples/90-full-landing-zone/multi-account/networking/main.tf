@@ -1,5 +1,5 @@
 module "tgw" {
-  source              = "../../../../modules/tgw"
+  source              = "../../../../modules/tgw-core"
   tgw_name                        = var.tgw_name
   description                     = var.description
   amazon_side_asn                 = var.amazon_side_asn
