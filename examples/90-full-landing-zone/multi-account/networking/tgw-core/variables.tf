@@ -38,7 +38,33 @@ variable "principal" {
 variable "share_name" { 
     type = string 
 }
+variable "region" {
+  description = "AWS region"
+  type        = string
+}
+variable "ingress_prefix" { type = string }
+variable "egress_prefix" { type = string }
+variable "spokes_prefix" { type = string }
+
 variable "tags" {
-  description = "Tags to apply to resources."
+  description = "Common resource tags"
   type        = map(string)
+}
+variable "ingress_vpc_cidr" {
+    type = string
+}
+variable "ingress_public_subnet_cidrs" {
+  type = list(string)
+}
+variable "ingress_private_subnet_cidrs" {
+  type = list(string)
+}
+variable "egress_vpc_cidr" {
+    type = string
+}
+variable "egress_public_subnet_cidrs" {
+  type = list(string)
+}
+variable "egress_private_subnet_cidrs" {
+  type = list(string)
 }
