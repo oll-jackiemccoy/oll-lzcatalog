@@ -1,5 +1,5 @@
 module "tgw" {
-  source              = "../../../../modules/tgw-core"
+  source              = "../../../../../modules/tgw-core"
   tgw_name                        = var.tgw_name
   description                     = var.description
   amazon_side_asn                 = var.amazon_side_asn
@@ -14,7 +14,7 @@ module "tgw" {
   tags   = merge(var.tags)
 }
 module "ingress_vpc" {
-  source              = "../../../../modules/ingress-vpc"
+  source              = "../../../../../modules/ingress-vpc"
   vpc_cidr            = var.ingress_vpc_cidr
   public_subnet_cidrs = var.ingress_public_subnet_cidrs
   private_subnet_cidrs= var.ingress_private_subnet_cidrs
@@ -22,7 +22,7 @@ module "ingress_vpc" {
   tags                = var.tags
 }
 module "egress_vpc" {
-  source              = "../../../../modules/egress-vpc"
+  source              = "../../../../../modules/egress-vpc"
   vpc_cidr            = var.egress_vpc_cidr
   public_subnet_cidrs = var.egress_public_subnet_cidrs
   private_subnet_cidrs= var.egress_private_subnet_cidrs
@@ -35,7 +35,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "ingress" {
   subnet_ids         = module.ingress_vpc.private_subnet_ids
 
   tags = merge(var.tags, {
-    Name = "${var.ingress_prefix}-to-tgw"
+    Name = "tgw-attach-${var.ingress_prefix}"
   })
 }
 resource "aws_ec2_transit_gateway_vpc_attachment" "egress" {
@@ -44,28 +44,22 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "egress" {
   subnet_ids         = module.egress_vpc.private_subnet_ids
 
   tags = merge(var.tags, {
-    Name = "${var.egress_prefix}-to-tgw"
+    Name = "tgw-attach-${var.egress_prefix}"
   })
 }
 resource "aws_ec2_transit_gateway_route_table" "ingress" {
   transit_gateway_id = module.tgw.tgw_id
   tags = merge(var.tags, { Name = "tgw-rtb-${var.ingress_prefix}" })
 }
-
-resource "aws_ec2_transit_gateway_route_table" "spokes" {
-  transit_gateway_id = module.tgw.tgw_id
-  tags = merge(var.tags, { Name = "tgw-rtb-${var.spokes_prefix}" })
-}
-
 resource "aws_ec2_transit_gateway_route_table" "egress" {
   transit_gateway_id = module.tgw.tgw_id
   tags = merge(var.tags, { Name = "tgw-rtb-${var.egress_prefix}" })
 }
-# resource "aws_ec2_transit_gateway_route_table_association" "ingress_assoc" {
-#   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.ingress.id
-#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.ingress.id
-# }
-# resource "aws_ec2_transit_gateway_route_table_association" "egress_assoc" {
-#   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.egress.id
-#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.egress.id
-# }
+resource "aws_ec2_transit_gateway_route_table_association" "egress_assoc" {
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.egress.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.egress.id
+}
+resource "aws_ec2_transit_gateway_route_table_association" "ingress_assoc" {
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.ingress.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.ingress.id
+}

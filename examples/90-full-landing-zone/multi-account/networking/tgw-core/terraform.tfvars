@@ -1,7 +1,7 @@
 tgw_name = "main-tgw"
 description = "Main TGW"
 amazon_side_asn = 64512
-auto_accept_shared_attachments = "enable"
+auto_accept_shared_attachments = "disable"
 default_route_table_association = "disable"
 default_route_table_propagation = "disable"
 dns_support = "enable"
@@ -19,7 +19,7 @@ egress_vpc_cidr = "10.23.0.0/19"
 egress_public_subnet_cidrs  = ["10.23.12.0/23", "10.23.14.0/23", "10.23.16.0/23"]
 egress_private_subnet_cidrs = ["10.23.0.0/22", "10.23.4.0/22", "10.23.8.0/22"]
 egress_prefix = "egress"
-spokes_prefix = "spokes"
+spokes_prefix = "account-a"
 
 tags = {
   ManagedBy    = "terraform"

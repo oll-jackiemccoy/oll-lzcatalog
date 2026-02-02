@@ -18,7 +18,9 @@ data "aws_ec2_transit_gateway" "shared" {
 }
 locals {
   shared_tgw_id = data.aws_ec2_transit_gateway.shared.id
+  spoke_private_route_table_ids = module.spoke_vpc_a.private_route_table_ids
 }
+
 resource "aws_ec2_transit_gateway_vpc_attachment" "spoke_a" {
   transit_gateway_id = local.shared_tgw_id
   vpc_id             = module.spoke_vpc_a.vpc_id
@@ -27,4 +29,18 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "spoke_a" {
 
   tags   = merge(var.tags, {
     Name = "tgw-attach-${var.name_prefix}" })
+}
+resource "aws_route" "spoke_a_default_to_tgw" {
+  for_each = toset(local.spoke_private_route_table_ids)
+
+  route_table_id         = each.value
+  destination_cidr_block = "0.0.0.0/0"
+  transit_gateway_id     = local.tgw_id
+}
+resource "aws_route" "spoke_a_default_to_ingress" {
+  for_each = toset(local.spoke_private_route_table_ids)
+
+  route_table_id         = each.value
+  destination_cidr_block = local.ingress_vpc_cidr
+  transit_gateway_id     = local.tgw_id
 }

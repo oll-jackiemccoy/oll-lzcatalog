@@ -1,3 +1,7 @@
+variable "region" {
+  description = "AWS region"
+  type        = string
+}
 variable "vpc_cidr" {
   description = "CIDR for the VPC"
   type        = string

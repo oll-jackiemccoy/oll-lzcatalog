@@ -1,7 +1,8 @@
 region = "us-east-1"
-name_prefix = "account-a"
-vpc_cidr = "10.25.0.0/16"
-private_subnet_cidrs = ["10.25.0.0/22", "10.25.4.0/22", "10.25.8.0/22"]
+ingress_prefix = "ingress"
+egress_prefix = "egress"
+spoke_prefix = "account-a"
+
 tags = {
   ManagedBy    = "terraform"
   Environment  = "multiaccount"

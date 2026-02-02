@@ -20,3 +20,25 @@ output "private_subnet_ids" {
     aws_subnet.privatesubnet_c.id,
   ]
 }
+output "public_subnet_ids" {
+  description = "All private subnet IDs as a list"
+  value = [
+    aws_subnet.publicsubnet_a.id,
+    aws_subnet.publicsubnet_b.id,
+    aws_subnet.publicsubnet_c.id,
+  ]
+}
+output "private_route_table_ids" {
+  value = [
+    aws_route_table.private_a.id,
+    aws_route_table.private_b.id,
+    aws_route_table.private_c.id,
+  ]
+}
+output "public_route_table_ids" {
+  value = [
+    aws_route_table.rtb_public_a.id,
+    aws_route_table.rtb_public_b.id,
+    aws_route_table.rtb_public_c.id,
+  ]
+}
