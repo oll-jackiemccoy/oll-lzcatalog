@@ -1,7 +1,7 @@
 tgw_name = "main-tgw"
 description = "Main TGW"
 amazon_side_asn = 64512
-auto_accept_shared_attachments = "disable"
+auto_accept_shared_attachments = "enable"
 default_route_table_association = "disable"
 default_route_table_propagation = "disable"
 dns_support = "enable"

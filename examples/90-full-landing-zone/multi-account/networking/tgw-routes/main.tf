@@ -1,44 +1,26 @@
-data "aws_ec2_transit_gateway_vpc_attachments" "spoke_a_attach" {
-  filter {
-    name   = "transit-gateway-id"
-    values = [local.tgw_id]
-  }
-  filter {
-    name  = "vpc-id"
-    values = [local.spoke_a_vpc_id]
-  }
-  # Optional: filter by attachment state(s) you consider valid
-  filter {
-    name   = "state"
-    values = ["available", "pendingAcceptance", "pending"]
-  }
-}
-locals {
-  tgw_attachment_id = try(one(data.aws_ec2_transit_gateway_vpc_attachments.spoke_a_attach.ids), null)
-  has_attachment    = local.tgw_attachment_id != null
-}
 resource "aws_ec2_transit_gateway_route_table" "spoke_a" {
   transit_gateway_id = local.tgw_id
   tags = merge(var.tags, { Name = "tgw-rtb-${var.spoke_prefix}" })
 }
 
-resource "aws_ec2_transit_gateway_vpc_attachment_accepter" "spoke_a" {
-  transit_gateway_attachment_id = local.tgw_attachment_id
-  tags = merge(var.tags, { Name = "tgw-attach-${var.spoke_prefix}" })
+resource "aws_ec2_tag" "spoke_a_attachment_name" {
+  resource_id = local.spoke_tgw_attachment_id
+  key         = "Name"
+  value       = "tgw-attach-${var.spoke_prefix}"
 }
 
 resource "aws_ec2_transit_gateway_route_table_association" "spoke_a_assoc" {
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.spoke_a.id
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment_accepter.spoke_a.id
+  transit_gateway_attachment_id  = local.spoke_tgw_attachment_id
 }
 
 resource "aws_ec2_transit_gateway_route_table_propagation" "spoke_a_prop_to_egress" {
   transit_gateway_route_table_id = local.egress_tgw_route_table
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment_accepter.spoke_a.id
+  transit_gateway_attachment_id  = local.spoke_tgw_attachment_id
 }
 resource "aws_ec2_transit_gateway_route_table_propagation" "spoke_a_prop_to_ingress" {
   transit_gateway_route_table_id = local.ingress_tgw_route_table
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment_accepter.spoke_a.id
+  transit_gateway_attachment_id  = local.spoke_tgw_attachment_id
 }
 
 resource "aws_ec2_transit_gateway_route" "internet_spoke_to_egress" {

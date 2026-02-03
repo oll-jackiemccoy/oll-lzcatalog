@@ -11,6 +11,7 @@ data "terraform_remote_state" "account-a" {
 locals {
   spoke_a_vpc_id = data.terraform_remote_state.account-a.outputs.spoke_vpc_id
   spoke_a_vpc_cidr = data.terraform_remote_state.account-a.outputs.spoke_vpc_cidr
+  spoke_tgw_attachment_id = data.terraform_remote_state.account-a.outputs.spoke_tgw_attachment_id
 }
 
 data "terraform_remote_state" "tgw_core" {

@@ -18,7 +18,7 @@ output "spoke_private_subnet_ids" {
 
 output "shared_tgw_id" {
  description = "Discovered shared TGW ID used for attachment"
- value       = local.shared_tgw_id
+ value       = local.tgw_id
 }
 output "private_route_table_ids" {
   description = "Route table IDs for private subnets (one per AZ)"
