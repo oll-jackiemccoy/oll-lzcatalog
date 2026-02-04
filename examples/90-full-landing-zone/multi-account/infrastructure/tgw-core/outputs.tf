@@ -25,6 +25,9 @@ output "egress_public_route_table_ids" {
 output "ingress_vpc_cidr" {
   value       = module.ingress_vpc.vpc_cidr
 }
+output "ingress_vpc_id" {
+  value       = module.ingress_vpc.vpc_id
+}
 output "ingress_private_route_table_ids" {
   description = "Route table IDs for private subnets (one per AZ)"
   value       = module.ingress_vpc.private_route_table_ids
@@ -32,4 +35,7 @@ output "ingress_private_route_table_ids" {
 output "ingress_public_route_table_ids" {
   description = "Route table IDs for private subnets (one per AZ)"
   value       = module.ingress_vpc.public_route_table_ids
+}
+output "ingress_public_subnet_ids" {
+  value       = module.ingress_vpc.public_subnet_ids
 }
